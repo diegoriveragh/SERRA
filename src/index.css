@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@700;800&display=swap');
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', sans-serif;
+    --font-montserrat: 'Montserrat', sans-serif;
+
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-blue to-blue-800 bg-clip-text text-transparent;
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-lg border-b border-slate-200/80;
+  }
+}
