@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -32,33 +31,36 @@ const PlansModal = ({ isOpen, onOpenChange }) => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  const handleNext = (e) => {
-    e.stopPropagation();
+  const handleNext = useCallback(() => {
     if (selectedImageIndex === null) return;
     setSelectedImageIndex((prevIndex) => (prevIndex + 1) % plans.length);
-  };
+  }, [selectedImageIndex, plans.length]);
 
-  const handlePrev = (e) => {
-    e.stopPropagation();
+  const handlePrev = useCallback(() => {
     if (selectedImageIndex === null) return;
     setSelectedImageIndex((prevIndex) => (prevIndex - 1 + plans.length) % plans.length);
-  };
+  }, [selectedImageIndex, plans.length]);
   
-  const handleCloseLightbox = () => {
+  const handleCloseLightbox = useCallback(() => {
     setSelectedImageIndex(null);
-  };
-
+  }, []);
+  
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (selectedImageIndex !== null) {
-        if (e.key === 'ArrowRight') handleNext(e);
-        if (e.key === 'ArrowLeft') handlePrev(e);
-        if (e.key === 'Escape') handleCloseLightbox(e);
+        if (e.key === 'ArrowRight') handleNext();
+        if (e.key === 'ArrowLeft') handlePrev();
+        if (e.key === 'Escape') handleCloseLightbox();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImageIndex]);
+  }, [selectedImageIndex, handleNext, handlePrev, handleCloseLightbox]);
+
+  const handleButtonAction = (e, action) => {
+    e.stopPropagation();
+    action();
+  };
 
   return (
     <>
@@ -97,25 +99,25 @@ const PlansModal = ({ isOpen, onOpenChange }) => {
             onClick={handleCloseLightbox}
           >
             <motion.button
-              className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 z-20 hover:bg-black/80 transition-colors"
-              onClick={(e) => { e.stopPropagation(); handleCloseLightbox(); }}
-              onTouchEnd={(e) => { e.stopPropagation(); handleCloseLightbox(); }}
+              className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 z-[110] hover:bg-black/80 transition-colors pointer-events-auto"
+              onClick={(e) => handleButtonAction(e, handleCloseLightbox)}
+              onTouchEnd={(e) => handleButtonAction(e, handleCloseLightbox)}
             >
               <X className="h-8 w-8" />
             </motion.button>
 
             <motion.button
-              className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-20 hover:bg-black/80 transition-colors"
-              onClick={handlePrev}
-              onTouchEnd={handlePrev}
+              className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-[110] hover:bg-black/80 transition-colors pointer-events-auto"
+              onClick={(e) => handleButtonAction(e, handlePrev)}
+              onTouchEnd={(e) => handleButtonAction(e, handlePrev)}
             >
               <ChevronLeft className="h-10 w-10" />
             </motion.button>
 
             <motion.button
-              className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-20 hover:bg-black/80 transition-colors"
-              onClick={handleNext}
-              onTouchEnd={handleNext}
+              className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-[110] hover:bg-black/80 transition-colors pointer-events-auto"
+              onClick={(e) => handleButtonAction(e, handleNext)}
+              onTouchEnd={(e) => handleButtonAction(e, handleNext)}
             >
               <ChevronRight className="h-10 w-10" />
             </motion.button>
